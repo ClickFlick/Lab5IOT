@@ -6,7 +6,6 @@ class Product {
   final int price;
   final int quantity;
 
-
   const Product(
       {@required this.name, @required this.quantity, @required this.price});
 }

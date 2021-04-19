@@ -38,8 +38,10 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Product> shoppingList = [];
   List<Product> favs = [];
 
+
   @override
   Widget build(BuildContext context) {
+    favs = favs.toSet().toList();
     const TextStyle optionStyle =
     TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
     List<Widget> _widgetOptions = <Widget>[
