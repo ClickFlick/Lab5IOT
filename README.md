@@ -1,4 +1,12 @@
 # iot_lab5
+Lab 5 HW for IOT
+Modify the application as follows:
+ When you click on one of the products to see more information about it (price, quantity ...)
+ Swipe left will delete the product
+ Swipe right will add it to favorites
+ Implement a search bar
+ Implement the BottomNavigationBar, which will contain the current page and the page with favorite products
+ Host your app on the web, using Firebase Hosting
 
 A new Flutter application.
 
