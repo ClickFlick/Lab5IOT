@@ -6,6 +6,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/button_builder.dart';
+import 'package:iot_lab5/verify.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -70,6 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       onPressed: () async {
                         if (_formKey.currentState.validate()) {
                           await _register();
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (context) => VerifyScreen()));
                         }
                       },
                       text: 'Register',

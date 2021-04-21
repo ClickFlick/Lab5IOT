@@ -129,9 +129,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                     Buttons.Email,
                     text: 'Sign In',
                     onPressed: () async {
-                      if (_formKey.currentState.validate()) {
+                      final _auth = FirebaseAuth.instance;
+                      User user;
+                      user = _auth.currentUser;
+                      if (_formKey.currentState.validate() && user.emailVerified) {
                         await _signInWithEmailAndPassword();
-
                       }
                     },
                   ),
