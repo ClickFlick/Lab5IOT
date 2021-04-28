@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:iot_lab5/editProfile.dart';
 import 'package:iot_lab5/product.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-
+import 'package:iot_lab5/user.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -47,15 +47,14 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Product> favs = [];
   final User user = _auth.currentUser;
 
-
-
   @override
   Widget build(BuildContext context) {
     favs = favs.toSet().toList();
     final String email = user.email;
     final String UID = user.uid;
+    final String name = user.displayName;
     const TextStyle optionStyle =
-    TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+        TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
     List<Widget> _widgetOptions = <Widget>[
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -70,15 +69,15 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 "Products you have to buy",
                 style: TextStyle(
-                    fontSize: 25, fontWeight: FontWeight.bold, color: Colors.amber),
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber),
               ),
             ],
-
           ),
-
           Expanded(
             child: ListView.builder(
-              itemCount:shoppingList.length,
+              itemCount: shoppingList.length,
               itemBuilder: (context, index) {
                 checker = shoppingList.length;
                 return Dismissible(
@@ -137,6 +136,28 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                for(var i = 0; i < shoppingList.length; i++){
+                  Product.saveProduct(Product(
+                    price: shoppingList[i].price,
+                    quantity: shoppingList[i].quantity,
+                    name: shoppingList[i].name
+                  ));
+                }
+
+              });
+            },
+            child: Text("Save!"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => EditProfile()));
+            },
+            child: Text("Edit Profile"),
+          ),
           Text(
             email,
           ),
@@ -158,11 +179,12 @@ class _MyHomePageState extends State<MyHomePage> {
               Text(
                 "Your favourite products",
                 style: TextStyle(
-                    fontSize: 25, fontWeight: FontWeight.bold, color: Colors.amber),
+                    fontSize: 25,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.amber),
               ),
             ],
           ),
-
           Expanded(
             child: ListView.builder(
               itemCount: favs.length,
@@ -180,6 +202,28 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ),
+          TextButton(
+            onPressed: () {
+              setState(() {
+                for(var i = 0; i < favs.length; i++){
+                  Product.saveProductFav(Product(
+                      price: favs[i].price,
+                      quantity: favs[i].quantity,
+                      name: favs[i].name
+                  ));
+                }
+
+              });
+            },
+            child: Text("Save!"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => EditProfile()));
+            },
+            child: Text("Edit Profile"),
+          ),
           Text(
             email,
           ),
@@ -188,27 +232,22 @@ class _MyHomePageState extends State<MyHomePage> {
           )
         ],
       ),
-
-
     ];
     void _onItemTapped(int index) {
       setState(() {
-
         _selectedIndex = index;
-
       });
     }
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
       body: Center(
-          child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: _widgetOptions.elementAt(_selectedIndex)
-
-          ),),
-
+        child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: _widgetOptions.elementAt(_selectedIndex)),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => displayDialog(context),
         tooltip: 'Increment',

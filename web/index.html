@@ -35,12 +35,14 @@
        https://developers.google.com/web/fundamentals/primers/service-workers -->
 
   <!-- The core Firebase JS SDK is always required and must be listed first -->
-  <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.4.2/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.4.1/firebase-firestore.js"></script>
   <!-- TODO: Add SDKs for Firebase products that you want to use
        https://firebase.google.com/docs/web/setup#available-libraries -->
 
   <script>
+  // Your web app's Firebase configuration
   var firebaseConfig = {
     apiKey: "AIzaSyD5Q2w7sUOaPenxkA8eHGG7lSLJSDzOx74",
     authDomain: "flutteriot5.firebaseapp.com",
@@ -49,6 +51,7 @@
     messagingSenderId: "177797657030",
     appId: "1:177797657030:web:1fc475ca5dfe22e94d02c7"
   };
+  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
 </script>
   <script>

@@ -12,6 +12,7 @@ import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:iot_lab5/shoppingList.dart';
+import 'package:iot_lab5/user.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -129,12 +130,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                     Buttons.Email,
                     text: 'Sign In',
                     onPressed: () async {
-                      final _auth = FirebaseAuth.instance;
-                      User user;
-                      user = _auth.currentUser;
-                      if (_formKey.currentState.validate() && user.emailVerified) {
+                      User user = (await _auth.signInWithEmailAndPassword(email: _emailController.text, password:_passwordController.text)).user;
+                      if(_formKey.currentState.validate() && user.emailVerified ) {
                         await _signInWithEmailAndPassword();
                       }
+
                     },
                   ),
                 ),
@@ -157,12 +157,14 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       final User user = (await _auth.signInWithEmailAndPassword(
         email: _emailController.text,
         password: _passwordController.text,
+
       ))
           .user;
+          var thisUser = await UserModel.getCurrentUser(user.uid);
 
       Scaffold.of(context).showSnackBar(
         SnackBar(
-          content: Text('${user.email} signed in'),
+          content: Text('${thisUser.email}  ${thisUser.name} signed in'),
 
         ),
 

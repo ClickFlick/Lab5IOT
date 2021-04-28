@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_signin_button/button_builder.dart';
 import 'package:iot_lab5/verify.dart';
+import 'package:iot_lab5/user.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -23,7 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  final TextEditingController _nameController = TextEditingController();
   bool _success;
   String _userEmail = '';
 
@@ -41,6 +42,16 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: const InputDecoration(labelText: 'Name'),
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
+                  ),
                   TextFormField(
                     controller: _emailController,
                     decoration: const InputDecoration(labelText: 'Email'),
@@ -72,7 +83,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         if (_formKey.currentState.validate()) {
                           await _register();
                           Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(builder: (context) => VerifyScreen()));
+                              MaterialPageRoute(
+                                  builder: (context) => VerifyScreen()));
                         }
                       },
                       text: 'Register',
@@ -83,8 +95,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Text(_success == null
                         ? ''
                         : (_success
-                        ? 'Successfully registered $_userEmail'
-                        : 'Registration failed')),
+                            ? 'Successfully registered $_userEmail'
+                            : 'Registration failed')),
                   )
                 ],
               ),
@@ -98,6 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
     // Clean up the controller when the Widget is disposed
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -112,6 +125,8 @@ class _RegisterPageState extends State<RegisterPage> {
       setState(() {
         _success = true;
         _userEmail = user.email;
+        UserModel.updateCurrentUser(UserModel(
+            email: user.email, id: user.uid, name: _nameController.text));
       });
     } else {
       _success = false;

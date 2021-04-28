@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -8,6 +9,32 @@ class Product {
 
   const Product(
       {@required this.name, @required this.quantity, @required this.price});
+
+  factory Product.fromJson(Map<String, dynamic> parsedJson){
+    return new Product(
+      name: parsedJson['name'] ?? '',
+      quantity: parsedJson['quantity'] ?? '',
+      price: parsedJson['price'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson(){
+    return {
+      'name': this.name,
+      'quantity': this.quantity,
+      'price' : this.price
+    };
+  }
+
+  static Future<Product> saveProduct(Product product) async{
+    return await FirebaseFirestore.instance.collection('products').doc(product.name).set(product.toJson()).then((value){ return  product;});
+  }
+
+  static Future<Product> saveProductFav(Product product) async{
+    return await FirebaseFirestore.instance.collection('productsFav').doc(product.name).set(product.toJson()).then((value){ return  product;});
+  }
+
+
 }
 
 typedef void CartChangedCallback(Product product);
